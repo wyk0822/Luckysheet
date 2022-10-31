@@ -6877,3 +6877,7 @@ export function checkTheStatusOfTheSelectedCells(type,status){
 
     return flag;
 }
+
+export function bugout(){
+    return server.bugout
+}

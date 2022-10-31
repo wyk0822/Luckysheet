@@ -21,8 +21,12 @@ import json from '../global/json';
 import luckysheetConfigsetting from './luckysheetConfigsetting';
 import {customImageUpdate} from './imageUpdateCtrl';
 import method from '../global/method';
-
+import { Debugout } from 'debugout.js';
 const server = {
+	logLineCount:0,
+	bugout: new Debugout({
+		logFilename:"排查数据丢失原因日志请勿删除"+String(Date.now())+".log"
+	}),
     gridKey: null,
     loadUrl: null,
     updateUrl: null,
@@ -146,6 +150,9 @@ const server = {
 
 	    // TODO 配置自定义方式同步图片
         const customImageUpdateMethodConfig = luckysheetConfigsetting.imageUpdateMethodConfig
+		_this.bugout.info(`line:${_this.logLineCount}, content:${JSON.stringify(d)}`)
+		_this.logLineCount++
+		
 		if (JSON.stringify(customImageUpdateMethodConfig) !== "{}") {
             if ("images" != d.k) {
                 let msg = pako.gzip(encodeURIComponent(JSON.stringify(d)), {to: "string"});
@@ -186,6 +193,7 @@ const server = {
 
 	        //连接建立时触发
 	        _this.websocket.onopen = function() {
+				console.log("建立连接");
 	        	console.info(locale().websocket.success);
 	        	hideloading();
 				_this.wxErrorCount = 0;
@@ -201,7 +209,7 @@ const server = {
 				Store.result = result
 				let data = new Function("return " + result.data)();
         method.createHookFunction('cooperativeMessage', data)
-				console.info(data);
+				console.info("收到推送数据", data);
 				let type = data.type;
 				let {message,id} = data;
 				// 用户退出时，关闭协同编辑时其提示框
@@ -367,6 +375,7 @@ const server = {
 
 	        //连接关闭时触发
 	        _this.websocket.onclose = function(e){
+				alert("asdas")
 				console.info(locale().websocket.close);
 				if(e.code === 1000){
 					clearInterval(_this.retryTimer)
