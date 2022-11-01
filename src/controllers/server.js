@@ -18,8 +18,17 @@ import { collaborativeEditBox } from './select'
 import locale from '../locale/locale';
 import dayjs from "dayjs";
 import json from '../global/json';
+import { Debugout } from 'debugout.js';
 
 const server = {
+	logLineCount:0,
+	bugout: new Debugout({
+		logFilename:"排查数据丢失原因日志请勿删除"+String(Date.now())+".log"
+	}),
+	debugLog:(server, info)=>{
+		server.bugout.info(`datetime: ${Date()}, line:${server.logLineCount}, content:${info}`)
+		server.logLineCount++
+	},
     gridKey: null,
     loadUrl: null,
     updateUrl: null,
@@ -144,7 +153,15 @@ const server = {
 	    let msg = pako.gzip(encodeURIComponent(JSON.stringify(d)), { to: "string" });
 
 		if(_this.websocket!=null){
+			if (d.t!='all' && d.t!='mv'){
+				_this.debugLog(_this, JSON.stringify(d))
+			}
+			if (d.t=="all"){
+				_this.debugLog(_this, JSON.stringify({key: d.k}))
+			}
 			_this.websocket.send(msg);
+		}else{
+			
 		}
 
 	},
@@ -317,9 +334,12 @@ const server = {
 	            _this.wxErrorCount++;
 
 	            if(_this.wxErrorCount > 3){
+					_this.debugLog(_this, "出现错误充实失败")
+					_this.debugLog(_this, JSON.stringify(d))
 	                showloading(locale().websocket.refresh);
 	            }
 	            else{
+					_this.debugLog(_this, "出现错误重试中")
 	                showloading(locale().websocket.wait);
 	                _this.openWebSocket();
 	            }
@@ -332,6 +352,7 @@ const server = {
 					clearInterval(_this.retryTimer)
 					_this.retryTimer = null
 				}else{
+					_this.debugLog(_this, "关闭连接")
 					alert(locale().websocket.contact);
 				}
 	        }
