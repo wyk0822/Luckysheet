@@ -166,9 +166,10 @@ export function getcellvalue(r, c, data, type) {
         else if(type == "f") {
             retv = d_value["v"];
         }
-        else if(d_value && d_value.ct && d_value.ct.t == 'd') {
-            retv = d_value.m;
-        }
+        // fix conditionalFormat "occurrenceDate" => "2023-05-17 to 2023-05-19"
+        // else if(d_value && d_value.ct && d_value.ct.t == 'd') {
+        //     retv = d_value.m;
+        // }
     }
 
     if(retv == undefined){
@@ -211,8 +212,11 @@ export function datagridgrowth(data, addr, addc, iscallback) {
         rowadd.push(null);
     }
 
-    for (let r = 0; r < data.length; r++) {
-        data[r] = [].concat(data[r].concat(coladd));
+    // 下面循环非常耗时, 在coladd为空时是无用循环
+    if (coladd && coladd.length) {
+        for (let r = 0; r < data.length; r++) {
+            data[r] = [].concat(data[r].concat(coladd));
+        }
     }
 
     for (let r = 0; r < addr; r++) {
@@ -352,7 +356,7 @@ export function getFontStyleByCell(cell,checksAF,checksCF, isCheck=true){
             style += "font-family: " + f + ";";
         }
 
-        if(key == "fs" && value != "10"){
+        if(key == "fs"){
             style += "font-size: "+ value + "pt;";
         }
 
@@ -509,12 +513,12 @@ export function checkstatusByCell(cell, a){
     }
     else if(a == "fs"){
         if(foucsStatus == null){
-            foucsStatus = "10";
+            foucsStatus = String(Store.defaultFontSize);
         }
         else{
             foucsStatus = foucsStatus[a];
             if(foucsStatus == null){
-                foucsStatus = "10";
+                foucsStatus = String(Store.defaultFontSize);
             }
         }
     }

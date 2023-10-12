@@ -241,8 +241,10 @@ function createFilterOptions(luckysheet_filter_save, filterObj) {
     let optionHTML = "";
 
     for (let c = c1; c <= c2; c++) {
+        const isHide = Store.config != null && Store.config["colhidden"] != null && c in Store.config["colhidden"]
+
         if(filterObj == null || filterObj[c - c1] == null){
-            optionHTML += '<div data-rowhidden="" data-str="'+ r1 +'" data-edr="'+ r2 +'" data-cindex="'+ c +'" data-stc="'+ c1 +'" data-edc="'+ c2 +'" class="luckysheet-filter-options" style="left:'+ (Store.visibledatacolumn[c] - 20) +'px;top:'+ row_pre +'px;display:block;"><i class="fa fa-caret-down" aria-hidden="true"></i></div>';
+            optionHTML += '<div data-rowhidden="" data-str="'+ r1 +'" data-edr="'+ r2 +'" data-cindex="'+ c +'" data-stc="'+ c1 +'" data-edc="'+ c2 +'" class="luckysheet-filter-options" style="left:'+ (Store.visibledatacolumn[c] - 20) +'px;top:'+ row_pre +'px;display:'+ (isHide ? 'none' : 'block') +';"><i class="fa fa-caret-down" aria-hidden="true"></i></div>';
         }
         else{
             let caljs_data;
@@ -274,7 +276,7 @@ function createFilterOptions(luckysheet_filter_save, filterObj) {
                 caljs_data = '';
             }
 
-            optionHTML += '<div data-rowhidden="'+ JSON.stringify(filterObj[c - c1].rowhidden).replace(/\"/g, "'") +'" '+ caljs_data +' data-str="'+ r1 +'" data-edr="'+ r2 +'" data-cindex="'+ c +'" data-stc="'+ c1 +'" data-edc="'+ c2 +'" class="luckysheet-filter-options luckysheet-filter-options-active" style="left:'+ (Store.visibledatacolumn[c] - 20) +'px;top:'+ row_pre +'px;display:block;"><i class="fa fa-filter luckysheet-mousedown-cancel" aria-hidden="true"></i></div>';
+            optionHTML += '<div data-rowhidden="'+ JSON.stringify(filterObj[c - c1].rowhidden).replace(/\"/g, "'") +'" '+ caljs_data +' data-str="'+ r1 +'" data-edr="'+ r2 +'" data-cindex="'+ c +'" data-stc="'+ c1 +'" data-edc="'+ c2 +'" class="luckysheet-filter-options luckysheet-filter-options-active" style="left:'+ (Store.visibledatacolumn[c] - 20) +'px;top:'+ row_pre +'px;display:'+ (isHide ? 'none' : 'block') +';"><i class="fa fa-filter luckysheet-mousedown-cancel" aria-hidden="true"></i></div>';
         }
     }
 
@@ -550,7 +552,13 @@ function initialFilterHandler(){
                 }
                 else{
                     let v, m;
-                    if(cell == null || isRealNull(cell.v)){
+                    if((cell == null || isRealNull(cell.v)) && cell?.mc){
+                        const { r, c } = cell.mc;
+                        const mainCell = Store.flowdata[r][c];
+                        v = mainCell.v;
+                        m = mainCell.m;
+                    }
+                    else if(cell == null || isRealNull(cell.v)){
                         v = null;
                         m = null;
                     }
@@ -860,7 +868,7 @@ function initialFilterHandler(){
             }
             //颜色筛选子菜单
             $("#luckysheet-filter-orderby-color-submenu").remove();
-            $("body").first().append('<div id="luckysheet-filter-orderby-color-submenu" class="luckysheet-cols-menu luckysheet-mousedown-cancel">'+content+'</div>');
+            $("body").append('<div id="luckysheet-filter-orderby-color-submenu" class="luckysheet-cols-menu luckysheet-mousedown-cancel">'+content+'</div>');
             let $t = $("#luckysheet-filter-orderby-color-submenu").end();
             let $con = $(this).parent();
             let winW = $(window).width(), winH = $(window).height();
@@ -1735,7 +1743,12 @@ function initialFilterHandler(){
                 let cell = Store.flowdata[r][cindex];
 
                 let value;
-                if(cell == null || isRealNull(cell.v)){
+                if((cell == null || isRealNull(cell.v)) && cell?.mc){
+                    const { r, c } = cell.mc
+                    const mainCell = Store.flowdata[r][c]
+                    value = mainCell.v + "#$$$#" + mainCell.m;
+                }
+                else if(cell == null || isRealNull(cell.v)){
                     value = "null#$$$#null";
                 }
                 else if(cell.ct != null && cell.ct.t == "d"){

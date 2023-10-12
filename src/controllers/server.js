@@ -155,7 +155,7 @@ const server = {
         const customImageUpdateMethodConfig = luckysheetConfigsetting.imageUpdateMethodConfig
 		_this.bugout.info(`line:${_this.logLineCount}, content:${JSON.stringify(d)}`)
 		_this.logLineCount++
-		
+
 		if (JSON.stringify(customImageUpdateMethodConfig) !== "{}") {
             if ("images" != d.k) {
                 let msg = pako.gzip(encodeURIComponent(JSON.stringify(d)), {to: "string"});
@@ -387,7 +387,6 @@ const server = {
 
 	        //连接关闭时触发
 	        _this.websocket.onclose = function(e){
-				alert("asdas")
 				console.info(locale().websocket.close);
 				if(e.code === 1000){
 					clearInterval(_this.retryTimer)
@@ -563,7 +562,10 @@ const server = {
 	                    luckysheetFreezen.createFreezenVertical(file["freezen"].vertical.freezenverticaldata, file["freezen"].vertical.left);
 	                }
 
-	                luckysheetFreezen.createAssistCanvas();
+                  luckysheetFreezen.createAssistCanvas();
+                  setTimeout(function () {
+                    luckysheetrefreshgrid();
+                  }, 1);
 	            }
 	        }
 	        else if(k == "filter_select"){ //筛选范围

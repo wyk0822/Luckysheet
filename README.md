@@ -9,7 +9,7 @@
 
 </div>
 
-# Luckysheet 3.x is currently being rewritten in Typescript
+# Luckysheet 3.x has been renamed to [Univer](https://github.com/dream-num/univer)
 
 English| [简体中文](./README-zh.md)
 
@@ -20,7 +20,7 @@ English| [简体中文](./README-zh.md)
 ## Links
  | Source Code   | Documentation | Demo | Plugins Demo | Forum |
  | ------ | -------- | ------ | ------ | ------ |
- | [Github](https://github.com/mengshukeji/Luckysheet)| [Online Documentation](https://mengshukeji.github.io/LuckysheetDocs/) | [Online Demo](https://mengshukeji.github.io/LuckysheetDemo) / [Cooperative editing demo](http://luckysheet.lashuju.com/demo/) | [Import Excel Demo](https://mengshukeji.github.io/LuckyexcelDemo/) | [Chinese Forum](https://support.qq.com/product/288322)  |
+ | [Github](https://github.com/mengshukeji/Luckysheet)| [Online Documentation](https://dream-num.github.io/LuckysheetDocs/) | [Online Demo](https://dream-num.github.io/LuckysheetDemo) / [Cooperative editing demo](http://luckysheet.lashuju.com/demo/) | [Import Excel Demo](https://dream-num.github.io/LuckyexcelDemo/) | [Chinese Forum](https://support.qq.com/product/288322)  |
  | [Gitee Mirror](https://gitee.com/mengshukeji/Luckysheet)| [Gitee Online Documentation](https://mengshukeji.gitee.io/LuckysheetDocs/) | [Gitee Online Demo](https://mengshukeji.gitee.io/luckysheetdemo/) | [Gitee Import Excel Demo](https://mengshukeji.gitee.io/luckyexceldemo/) | [Google Group](https://groups.google.com/g/luckysheet) |
 
 ![Demo](/docs/.vuepress/public/img/LuckysheetDemo.gif)
@@ -58,11 +58,11 @@ English| [简体中文](./README-zh.md)
 - **Tables**: filter, sort
 - **Enhanced functions**: Pivot tables, charts, comments, cooperative editing, insert picture, matrix calculations, screenshots, copying to other formats, EXCEL import and export, etc.
 
-For a more detailed feature list, please refer to: [Features](https://mengshukeji.github.io/LuckysheetDocs/guide/#features)
+For a more detailed feature list, please refer to: [Features](https://dream-num.github.io/LuckysheetDocs/guide/#features)
 
 ## 📖 Resources
 - Priority reading for new users: [User Guide](https://github.com/mengshukeji/Luckysheet/wiki/User-Guide)
-- For the tutorials, learning materials and supporting solutions provided by the community, please refer to: [Tutorials and Resources](https://mengshukeji.github.io/LuckysheetDocs/guide/resource.html)
+- For the tutorials, learning materials and supporting solutions provided by the community, please refer to: [Tutorials and Resources](https://dream-num.github.io/LuckysheetDocs/guide/resource.html)
 
 ## 📜 Changelog
 
@@ -70,7 +70,7 @@ Detailed changes for each release are documented in the [CHANGELOG.md](CHANGELOG
 
 ## ❗️ Issues
 
-Please make sure to read the [Issue Reporting Checklist](https://mengshukeji.github.io/LuckysheetDocs/guide/contribute.html#how-to-submit-issues) before opening an issue. Issues not conforming to the guidelines may be closed immediately.
+Please make sure to read the [Issue Reporting Checklist](https://dream-num.github.io/LuckysheetDocs/guide/contribute.html#how-to-submit-issues) before opening an issue. Issues not conforming to the guidelines may be closed immediately.
 
 ## ✅ TODO
 
@@ -78,7 +78,7 @@ Managed with [GitHub Projects](https://github.com/mengshukeji/Luckysheet/project
 
 ## 💪Contribution
 
-Please make sure to read the[ Contributing Guide](https://mengshukeji.github.io/LuckysheetDocs/guide/contribute.html) before making a pull request.
+Please make sure to read the[ Contributing Guide](https://dream-num.github.io/LuckysheetDocs/guide/contribute.html) before making a pull request.
 
 ## Usage
 
@@ -135,8 +135,11 @@ npm run build
 - [luban-h5](https://github.com/ly525/luban-h5)
 - [h5-Dooring](https://github.com/MrXujiang/h5-Dooring)
 - [Furion](https://gitee.com/monksoul/Furion)
+- [AFFiNE.PRO](https://github.com/toeverything/AFFiNE)
 
 ## Communication
+
+- [WebSite](http://lucky.lashuju.com/index.html)
 - [Github Discussions](https://github.com/mengshukeji/Luckysheet/discussions)
 - [Gitter](https://gitter.im/mengshukeji/Luckysheet)
 
@@ -144,7 +147,7 @@ npm run build
 
 ## Sponsor
 
-Luckysheet is an MIT-licensed open source project with its ongoing development made possible entirely by the support of these awesome [backers](https://mengshukeji.github.io/LuckysheetDocs/about/sponsor.html#sponsors-list). If you'd like to join them, please consider:
+Luckysheet is an MIT-licensed open source project with its ongoing development made possible entirely by the support of these awesome [backers](https://dream-num.github.io/LuckysheetDocs/about/sponsor.html#sponsors-list). If you'd like to join them, please consider:
 
 - [Become a backer or sponsor on Patreon](https://www.patreon.com/mengshukeji).
 - [Become a backer or sponsor on Open Collective](https://opencollective.com/luckysheet).
@@ -161,6 +164,14 @@ Funds donated via Patreon go directly to support mengshukeji's work on Luckyshee
 ## Sponsors List
 
 (Sort by time)
+- *涛 ¥ 200
+- popo ¥ 1
+- 孔垂善 ¥ 5
+- Shawn文 ¥ 99
+- 幸运的小路易 ¥ 1
+- 冯启俊 ¥ 88
+- mxb ¥ 10
+- 祭阳 ¥ 20
 - *勇 ¥ 30
 - 虚我 ¥ 200
 - 甜党 ¥ 50
@@ -255,6 +266,13 @@ Funds donated via Patreon go directly to support mengshukeji's work on Luckyshee
 - 回调函数 ¥ 50
 - 赖瓜子 ¥ 5
 - Milo•J ¥ 20
+- 可道云 ¥ 200
+- *程 ¥ 10
+- 来一杯卡布酸奶 ¥ 5
+- 刘久胜 ¥ 100
+- 快意江湖 ¥ 50
+- *新 ¥ 9.9
+- **龙 ¥ 100
 
 ## Authors and acknowledgment
 

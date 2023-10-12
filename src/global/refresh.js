@@ -54,10 +54,12 @@ function jfrefreshgrid(data, range, allParam, isRunExecFunction = true, isRefres
     }
 
     let cfg = allParam["cfg"];  //config
+    let calc = allParam["calc"];
     let RowlChange = allParam["RowlChange"];  //行高改变
     let cdformat = allParam["cdformat"];  //条件格式
     let dataVerification = allParam["dataVerification"];  //数据验证
     let dynamicArray = allParam["dynamicArray"];  //动态数组
+    let hyperlink = allParam["hyperlink"];
 
     let file = Store.luckysheetfile[getSheetIndex(Store.currentSheetIndex)];
 
@@ -103,6 +105,8 @@ function jfrefreshgrid(data, range, allParam, isRunExecFunction = true, isRefres
             "sheetIndex": Store.currentSheetIndex, 
             "config": $.extend(true, {}, Store.config), 
             "curConfig": curConfig,
+            "calc": $.extend(true, [], file.calcChain),
+            "curCalc": calc,
             "cdformat":  $.extend(true, [], file["luckysheet_conditionformat_save"]),
             "curCdformat": curCdformat,
             "RowlChange": RowlChange,
@@ -110,6 +114,8 @@ function jfrefreshgrid(data, range, allParam, isRunExecFunction = true, isRefres
             "curDataVerification": curDataVerification,
             "dynamicArray": $.extend(true, [], file["dynamicArray"]),
             "curDynamicArray": curDynamicArray,
+            "hyperlink": hyperlink && $.extend(true, {}, file.hyperlink),
+            "curHyperlink": hyperlink,
             "range": range,
             "dataRange": [...file.luckysheet_select_save]// 保留操作时的选区
         });
@@ -132,6 +138,11 @@ function jfrefreshgrid(data, range, allParam, isRunExecFunction = true, isRefres
         }
     }
 
+    if(calc != null){
+        file.calcChain = calc;
+        server.saveParam("all", Store.currentSheetIndex, calc, { "k": "calcChain" });
+    }
+
     //condition format, null or empty array are not processed
     if(cdformat != null && cdformat.length !== 0){
         file["luckysheet_conditionformat_save"] = cdformat;
@@ -151,6 +162,12 @@ function jfrefreshgrid(data, range, allParam, isRunExecFunction = true, isRefres
         file["dynamicArray"] = dynamicArray;
 
         server.saveParam("all", Store.currentSheetIndex, dynamicArray, { "k": "dynamicArray" });
+    }
+
+    if(hyperlink != null){
+        file["hyperlink"] = hyperlink;
+        hyperlinkCtrl.hyperlink = hyperlink;
+        server.saveParam("all", Store.currentSheetIndex, hyperlink, { "k": "hyperlink" });
     }
 
     //更新数据的范围
