@@ -334,12 +334,12 @@ const server = {
 	            _this.wxErrorCount++;
 
 	            if(_this.wxErrorCount > 3){
-					_this.debugLog(_this, "出现错误充实失败")
+					_this.debugLog(_this, "出现错误重新连接失败")
 					_this.debugLog(_this, JSON.stringify(d))
 	                showloading(locale().websocket.refresh);
 	            }
 	            else{
-					_this.debugLog(_this, "出现错误重试中")
+					_this.debugLog(_this, "通信发生错误重试中")
 	                showloading(locale().websocket.wait);
 	                _this.openWebSocket();
 	            }
@@ -352,8 +352,9 @@ const server = {
 					clearInterval(_this.retryTimer)
 					_this.retryTimer = null
 				}else{
-					_this.debugLog(_this, "关闭连接")
-					alert(locale().websocket.contact);
+					_this.debugLog(_this, "连接已断开。")
+					alert("服务器通信发生错误，请点击确认刷新后重试，如若不行请联系管理员！");
+					location.reload(true);
 				}
 	        }
 	    }
