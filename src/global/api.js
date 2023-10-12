@@ -6667,3 +6667,10 @@ export function refreshMenuButtonFocus(data ,r,c , success){
         }
     })
 }
+
+/**
+ * 下载日志文件
+ */
+export function bugout(){
+   return server.bugout;
+}

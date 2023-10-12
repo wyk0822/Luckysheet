@@ -21,13 +21,11 @@ import json from '../global/json';
 import { Debugout } from 'debugout.js';
 
 const server = {
-	logLineCount:0,
 	bugout: new Debugout({
 		logFilename:"排查数据丢失原因日志请勿删除"+String(Date.now())+".log"
 	}),
 	debugLog:(server, info)=>{
-		server.bugout.info(`datetime: ${Date()}, line:${server.logLineCount}, content:${info}`)
-		server.logLineCount++
+		server.bugout.info(`datetime: ${Date()}, content:${info}`)
 	},
     gridKey: null,
     loadUrl: null,
