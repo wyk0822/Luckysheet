@@ -6878,6 +6878,10 @@ export function checkTheStatusOfTheSelectedCells(type,status){
     return flag;
 }
 
+/*
+ * 下载日志文件
+ */
 export function bugout(){
-    return server.bugout
+   return server.bugout;
 }
+
