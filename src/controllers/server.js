@@ -93,6 +93,12 @@ const server = {
 	},
     saveParam: function (type, index, value, params) {
     	let _this = this;
+		if (_this.websocket.readyState!=1 ){
+			_this.debugLog(_this, "发送数据时发现连接已断开。")
+			alert("服务器通信发生错误，请点击确认刷新后重试，如若不行请联系管理员！");
+			location.reload(true);
+			return
+		}
 
 	    if(!_this.allowUpdate){
 	        return;
