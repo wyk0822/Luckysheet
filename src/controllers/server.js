@@ -208,7 +208,7 @@ const server = {
 
 	        //连接建立时触发
 	        _this.websocket.onopen = function() {
-				console.log("建立连接");
+				_this.debugLog(_this, "建立连接")
 	        	console.info(locale().websocket.success);
 	        	hideloading();
 				_this.wxErrorCount = 0;
