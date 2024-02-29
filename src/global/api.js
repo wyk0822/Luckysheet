@@ -3309,6 +3309,7 @@ export function setRangeMerge(type, options = {}) {
     if (success && typeof success === 'function') {
         success();
     }
+    return isHasMc
 }
 
 /**
