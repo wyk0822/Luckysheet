@@ -3245,7 +3245,7 @@ export function setRangeMerge(type, options = {}) {
                     for (let r = r1; r <= r2; r++) {
                         let cell = data[r][c];
 
-                        if (cell != null && (!isRealNull(cell.v) || cell.f != null) && !isfirst) {
+                        if (cell != null && (!isRealNull(cell.v) || cell.f != null || cell.ct != null) && !isfirst) {
                             fv = $.extend(true, {}, cell);
                             isfirst = true;
                         }
@@ -6962,11 +6962,11 @@ export function bugout() {
 }
 
 export function setHyperlink(rowIndex, colIndex, linkData) {
-    let sheetIndex = Store.currentSheetIndex 
+    let sheetIndex = Store.currentSheetIndex
     let sheet = Store.luckysheetfile.filter(i => i.index == sheetIndex)
-    if (sheet.length>0){
+    if (sheet.length > 0) {
         sheet = sheet[0]
-    }else{
+    } else {
         return
     }
     let historyHyperlink = sheet.hyperlink
@@ -6980,7 +6980,7 @@ export function setHyperlink(rowIndex, colIndex, linkData) {
     // };
     let d = editor.deepCopyFlowData(Store.flowdata);
     let cell = d[rowIndex][colIndex];
-    if(cell == null){
+    if (cell == null) {
         cell = {};
     }
     cell.fc = 'rgb(0, 0, 255)';
@@ -6988,10 +6988,10 @@ export function setHyperlink(rowIndex, colIndex, linkData) {
 
     d[rowIndex][colIndex] = cell;
     hyperlinkCtrl.ref(
-        historyHyperlink, 
-        currentHyperlink, 
-        Store.currentSheetIndex, 
-        d, 
+        historyHyperlink,
+        currentHyperlink,
+        Store.currentSheetIndex,
+        d,
         [{ row: [rowIndex, rowIndex], column: [colIndex, colIndex] }]
     );
 }
