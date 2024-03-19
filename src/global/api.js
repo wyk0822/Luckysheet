@@ -1872,6 +1872,8 @@ export function getRangeHtml(options = {}) {
         return tooltip.info("The order parameter is invalid.", "");
     }
 
+    let hyperlink = $.extend(true, {}, file.hyperlink);
+
     //复制范围内包含部分合并单元格，提示
     let cfg = $.extend(true, {}, file.config);
     if (cfg["merge"] != null) {
@@ -2016,7 +2018,7 @@ export function getRangeHtml(options = {}) {
             }
 
             let column = '<td ${span} style="${style}">';
-
+            
             if (d[r] != null && d[r][c] != null) {
                 let style = "", span = "";
 
@@ -2265,11 +2267,26 @@ export function getRangeHtml(options = {}) {
                 if (c_value == null) {
                     c_value = getcellvalue(r, c, d);
                 }
+                // 处理保存在ct中的数据
+                if (c_value == null) {
+                    let ct = getcellvalue(r, c, d, "ct");
+                    if (ct != null && ct.s) {
+                        c_value = ct.s[0].v
+                        
+                    }
+
+                }
 
                 if (c_value == null) {
                     c_value = " ";
                 }
 
+                // 添加单元格 hyperlink
+                if (hyperlink[`${r}_${c}`]) {
+                    // console.log(hyperlink[`${r}_${c}`]);
+                    let cellHyperlink = hyperlink[`${r}_${c}`]
+                    c_value = `<a title="${cellHyperlink.linkTooltip}" href="${cellHyperlink.linkAddress}">${c_value}</a>`
+                }
                 column += c_value;
             }
             else {
@@ -2327,6 +2344,12 @@ export function getRangeHtml(options = {}) {
                 }
 
                 column = replaceHtml(column, { "style": style, "span": "" });
+
+                // 添加单元格 hyperlink
+                if (hyperlink[`${r}_${c}`]) {
+                    let cellHyperlink = hyperlink[`${r}_${c}`]
+                    column = `<a title="${cellHyperlink.linkTooltip}" href="${cellHyperlink.linkAddress}">${c_value}</a>`
+                }
                 column += " ";
             }
 
