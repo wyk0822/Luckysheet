@@ -16,6 +16,7 @@ import { replaceHtml, getObjType, luckysheetfontformat } from "../utils/util";
 import Store from "../store";
 import locale from "../locale/locale";
 import imageCtrl from "./imageCtrl";
+import { setHyperlink } from "../global/api";
 
 const selection = {
     clearcopy: function(e) {
@@ -973,7 +974,7 @@ const selection = {
             }
             return;
         }
-
+        pasteHyperLink(minh- c_r1, minc-c_c1)
         let d = editor.deepCopyFlowData(Store.flowdata); //取数据
         let rowMaxLength = d.length;
         let cellMaxLength = d[0].length;
