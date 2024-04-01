@@ -6,7 +6,7 @@ import editor from "../global/editor";
 import tooltip from "../global/tooltip";
 import formula from "../global/formula";
 import { getBorderInfoCompute } from "../global/border";
-import { getdatabyselection, getcellvalue, datagridgrowth } from "../global/getdata";
+import { getdatabyselection, getcellvalue, datagridgrowth,pasteHyperLink } from "../global/getdata";
 import { rowlenByRange } from "../global/getRowlen";
 import { isEditMode, hasPartMC, isRealNum } from "../global/validate";
 import { jfrefreshgrid, jfrefreshgrid_pastcut } from "../global/refresh";
@@ -91,7 +91,7 @@ const selection = {
         return style + color + ";";
     },
     copy: function(e) {
-        //copy事件
+                //copy事件
         let clipboardData = window.clipboardData; //for IE
         if (!clipboardData) {
             // for chrome
@@ -1539,7 +1539,7 @@ const selection = {
                 //行列位移值 用于单元格有函数
                 let offsetRow = mth - c_r1;
                 let offsetCol = mtc - c_c1;
-
+                pasteHyperLink(offsetRow, offsetCol)
                 let offsetMC = {};
                 for (let h = mth; h < maxrowCache; h++) {
                     let x = [].concat(d[h]);

@@ -1,17 +1,18 @@
-import { getObjType,rgbTohex } from '../utils/util';
+import { getObjType, rgbTohex } from '../utils/util';
 import { getSheetIndex } from '../methods/get';
 import server from '../controllers/server';
 import formula from './formula';
 import editor from './editor';
 import { dynamicArrayCompute } from './dynamicArray';
 import sheetmanage from '../controllers/sheetmanage';
-import { isInlineStringCT,isInlineStringCell,convertCssToStyleList } from '../controllers/inlineString';
+import { setHyperlink } from '../global/api';
+import { isInlineStringCT, isInlineStringCell, convertCssToStyleList } from '../controllers/inlineString';
 import locale from '../locale/locale';
 import Store from '../store';
 
 //Get selection range value
 export function getdatabyselection(range, sheetIndex) {
-    if(range == null){
+    if (range == null) {
         range = Store.luckysheet_select_save[0];
     }
 
@@ -21,19 +22,19 @@ export function getdatabyselection(range, sheetIndex) {
 
     //取数据
     let d, cfg;
-    if(sheetIndex != null && sheetIndex != Store.currentSheetIndex){
+    if (sheetIndex != null && sheetIndex != Store.currentSheetIndex) {
         d = Store.luckysheetfile[getSheetIndex(sheetIndex)]["data"];
         cfg = Store.luckysheetfile[getSheetIndex(sheetIndex)]["config"];
     }
-    else{
+    else {
         d = editor.deepCopyFlowData(Store.flowdata);
-        cfg = Store.config;    
+        cfg = Store.config;
     }
 
     let data = [];
 
     for (let r = range["row"][0]; r <= range["row"][1]; r++) {
-        if(d[r] == null){
+        if (d[r] == null) {
             continue;
         }
 
@@ -57,16 +58,16 @@ export function getdatabyselectionD(d, range) {
     if (range == null || range["row"] == null || range["row"].length == 0) {
         return [];
     }
-    
+
     let dynamicArray_compute = dynamicArrayCompute(Store.luckysheetfile[getSheetIndex(Store.currentSheetIndex)]["dynamicArray"]);
     let data = [];
 
-    if(d==null){
+    if (d == null) {
         return data;
     }
 
     for (let r = range["row"][0]; r <= range["row"][1]; r++) {
-        if(d[r] == null){
+        if (d[r] == null) {
             continue;
         }
 
@@ -78,11 +79,11 @@ export function getdatabyselectionD(d, range) {
 
         for (let c = range["column"][0]; c <= range["column"][1]; c++) {
             let value;
-            
-            if((r + "_" + c) in dynamicArray_compute){
+
+            if ((r + "_" + c) in dynamicArray_compute) {
                 value = dynamicArray_compute[r + "_" + c];
             }
-            else{
+            else {
                 value = d[r][c];
             }
 
@@ -104,7 +105,7 @@ export function getdatabyselectionNoCopy(range) {
 
     for (let r = range["row"][0]; r <= range["row"][1]; r++) {
         let row = [];
-        
+
         if (Store.config["rowhidden"] != null && Store.config["rowhidden"][r] != null) {
             continue;
         }
@@ -118,7 +119,7 @@ export function getdatabyselectionNoCopy(range) {
 
             row.push(value);
         }
-        
+
         data.push(row);
     }
 
@@ -144,8 +145,8 @@ export function getcellvalue(r, c, data, type) {
         d_value = data[r];
     }
     else if (c != null) {
-        let newData = data[0].map(function(col, i) {
-            return data.map(function(row) {
+        let newData = data[0].map(function (col, i) {
+            return data.map(function (row) {
                 return row[i];
             })
         });
@@ -157,13 +158,13 @@ export function getcellvalue(r, c, data, type) {
 
     let retv = d_value;
 
-    if(getObjType(d_value) == "object"){
+    if (getObjType(d_value) == "object") {
         retv = d_value[type];
 
         if (type == "f" && retv != null) {
             retv = formula.functionHTMLGenerate(retv);
         }
-        else if(type == "f") {
+        else if (type == "f") {
             retv = d_value["v"];
         }
         // fix conditionalFormat "occurrenceDate" => "2023-05-17 to 2023-05-19"
@@ -172,7 +173,7 @@ export function getcellvalue(r, c, data, type) {
         // }
     }
 
-    if(retv == undefined){
+    if (retv == undefined) {
         retv = null;
     }
 
@@ -223,7 +224,7 @@ export function datagridgrowth(data, addr, addc, iscallback) {
         data.push([].concat(rowadd));
     }
 
-    if(!!iscallback){
+    if (!!iscallback) {
         server.saveParam("all", Store.currentSheetIndex, data.length, { "k": "row" });
         server.saveParam("all", Store.currentSheetIndex, data[0].length, { "k": "column" });
     }
@@ -235,15 +236,15 @@ export function datagridgrowth(data, addr, addc, iscallback) {
 //Get the formula of the cell
 export function getcellFormula(r, c, i, data) {
     let cell;
-    if(data!=null){
+    if (data != null) {
         cell = data[r][c];
     }
-    else{
-        cell = getOrigincell(r,c,i);
+    else {
+        cell = getOrigincell(r, c, i);
     }
 
-    
-    if(cell==null){
+
+    if (cell == null) {
         return null;
     }
 
@@ -252,19 +253,19 @@ export function getcellFormula(r, c, i, data) {
 
 
 export function getOrigincell(r, c, i) {
-    if(r==null || c==null){
+    if (r == null || c == null) {
         return;
     }
     let data;
     if (i == null) {
         data = Store.flowdata;
     }
-    else{
+    else {
         let sheet = sheetmanage.getSheetByIndex(i);
         data = sheet.data;
     }
 
-    if(!data || !data[r] || !data[r][c]){
+    if (!data || !data[r] || !data[r][c]) {
         return;
     }
 
@@ -273,13 +274,13 @@ export function getOrigincell(r, c, i) {
 
 }
 
-export function getRealCellValue(r, c){
+export function getRealCellValue(r, c) {
     let value = getcellvalue(r, c, null, "m");
-    if(value == null){
+    if (value == null) {
         value = getcellvalue(r, c);
-        if(value==null){
+        if (value == null) {
             let ct = getcellvalue(r, c, null, "ct");
-            if(isInlineStringCT(ct)){
+            if (isInlineStringCT(ct)) {
                 value = ct.s;
             }
         }
@@ -288,13 +289,13 @@ export function getRealCellValue(r, c){
     return value;
 }
 
-export function getInlineStringNoStyle(r, c){
+export function getInlineStringNoStyle(r, c) {
     let ct = getcellvalue(r, c, null, "ct");
-    if(isInlineStringCT(ct)){
-        let strings = ct.s, value="";
-        for(let i=0;i<strings.length;i++){
+    if (isInlineStringCT(ct)) {
+        let strings = ct.s, value = "";
+        for (let i = 0; i < strings.length; i++) {
             let strObj = strings[i];
-            if(strObj.v!=null){
+            if (strObj.v != null) {
                 value += strObj.v;
             }
         }
@@ -304,19 +305,19 @@ export function getInlineStringNoStyle(r, c){
     return "";
 }
 
-export function getInlineStringStyle(r, c, data){
+export function getInlineStringStyle(r, c, data) {
     let ct = getcellvalue(r, c, data, "ct");
     if (data == null) {
         data = Store.flowdata;
     }
     let cell = data[r][c];
-    if(isInlineStringCT(ct)){
-        let strings = ct.s, value="";
-        for(let i=0;i<strings.length;i++){
+    if (isInlineStringCT(ct)) {
+        let strings = ct.s, value = "";
+        for (let i = 0; i < strings.length; i++) {
             let strObj = strings[i];
-            if(strObj.v!=null){
+            if (strObj.v != null) {
                 let style = getFontStyleByCell(strObj);
-                value += "<span index='"+ i +"' style='"+ style +"'>" + strObj.v + "</span>";
+                value += "<span index='" + i + "' style='" + style + "'>" + strObj.v + "</span>";
             }
         }
         return value;
@@ -325,54 +326,54 @@ export function getInlineStringStyle(r, c, data){
     return "";
 }
 
-export function getFontStyleByCell(cell,checksAF,checksCF, isCheck=true){
-    if(cell==null){
+export function getFontStyleByCell(cell, checksAF, checksCF, isCheck = true) {
+    if (cell == null) {
         return;
     }
     let style = "";
     const _locale = locale();
     const locale_fontarray = _locale.fontarray;
-    for(let key in cell){
+    for (let key in cell) {
         let value = cell[key];
-        if(isCheck){
+        if (isCheck) {
             value = checkstatusByCell(cell, key);
         }
-        if(key == "bl" && value != "0"){
+        if (key == "bl" && value != "0") {
             style += "font-weight: bold;";
         }
 
-        if(key == "it" && value != "0"){
+        if (key == "it" && value != "0") {
             style += "font-style:italic;";
         }
 
-        if(key == "ff"){
+        if (key == "ff") {
             let f = value;
-            if(!isNaN(parseInt(value))){
+            if (!isNaN(parseInt(value))) {
                 f = locale_fontarray[parseInt(value)];
             }
-            else{
+            else {
                 f = value;
             }
             style += "font-family: " + f + ";";
         }
 
-        if(key == "fs"){
-            style += "font-size: "+ value + "pt;";
+        if (key == "fs") {
+            style += "font-size: " + value + "pt;";
         }
 
-        if((key == "fc" && value != "#000000") || checksAF != null || (checksCF != null && checksCF["textColor"] != null)){
-            if(checksCF != null && checksCF["textColor"] != null){
+        if ((key == "fc" && value != "#000000") || checksAF != null || (checksCF != null && checksCF["textColor"] != null)) {
+            if (checksCF != null && checksCF["textColor"] != null) {
                 style += "color: " + checksCF["textColor"] + ";";
             }
-            else if(checksAF != null){
+            else if (checksAF != null) {
                 style += "color: " + checksAF[0] + ";";
             }
-            else{
-                style += "color: " + value + ";";  
+            else {
+                style += "color: " + value + ";";
             }
         }
 
-        if(key == "cl" && value != "0"){
+        if (key == "cl" && value != "0") {
             style += "text-decoration: line-through;";
         }
 
@@ -380,15 +381,15 @@ export function getFontStyleByCell(cell,checksAF,checksCF, isCheck=true){
     return style;
 }
 
-export function checkstatusByCell(cell, a){
-    let foucsStatus =cell;
-    let tf = {"bl":1, "it":1 , "ff":1, "cl":1, "un":1};
+export function checkstatusByCell(cell, a) {
+    let foucsStatus = cell;
+    let tf = { "bl": 1, "it": 1, "ff": 1, "cl": 1, "un": 1 };
 
-    if(a in tf || (a=="fs" && isInlineStringCell(cell)) ){
-        if(foucsStatus == null){
+    if (a in tf || (a == "fs" && isInlineStringCell(cell))) {
+        if (foucsStatus == null) {
             foucsStatus = "0";
         }
-        else{
+        else {
             // var  w = window.getSelection(), isInlineEdit=false; 
             // if(w.type!="None"){
             //     var range = w.getRangeAt(0);
@@ -400,7 +401,7 @@ export function checkstatusByCell(cell, a){
             //         isInlineEdit = true;
             //     }
             // }
-            
+
             // if(!isInlineEdit){       
             //     if(isInlineStringCell(cell)){
             //         foucsStatus = cell.ct.s[0][a];
@@ -409,148 +410,148 @@ export function checkstatusByCell(cell, a){
             //         foucsStatus = foucsStatus[a];
             //     }
             // }   
-            
+
             foucsStatus = foucsStatus[a];
-            
-            if(foucsStatus == null){
+
+            if (foucsStatus == null) {
                 foucsStatus = "0";
             }
         }
     }
-    else if(a == "fc"){
-        if(foucsStatus == null){
+    else if (a == "fc") {
+        if (foucsStatus == null) {
             foucsStatus = "#000000";
         }
-        else{
+        else {
             foucsStatus = foucsStatus[a];
 
-            if(foucsStatus == null){
+            if (foucsStatus == null) {
                 foucsStatus = "#000000";
             }
 
-            if(foucsStatus.indexOf("rgba") > -1){
+            if (foucsStatus.indexOf("rgba") > -1) {
                 foucsStatus = rgbTohex(foucsStatus);
             }
         }
     }
-    else if(a == "bg"){
-        if(foucsStatus == null){
+    else if (a == "bg") {
+        if (foucsStatus == null) {
             foucsStatus = null;
         }
-        else{
+        else {
             foucsStatus = foucsStatus[a];
 
-            if(foucsStatus == null){
+            if (foucsStatus == null) {
                 foucsStatus = null;
             }
-            else if(foucsStatus.toString().indexOf("rgba") > -1){
+            else if (foucsStatus.toString().indexOf("rgba") > -1) {
                 foucsStatus = rgbTohex(foucsStatus);
             }
         }
     }
-    else if(a.substr(0, 2) == "bs"){
-        if(foucsStatus == null){
+    else if (a.substr(0, 2) == "bs") {
+        if (foucsStatus == null) {
             foucsStatus = "none";
         }
-        else{
+        else {
             foucsStatus = foucsStatus[a];
-            if(foucsStatus == null){
+            if (foucsStatus == null) {
                 foucsStatus = "none";
             }
         }
     }
-    else if(a.substr(0, 2) == "bc"){
-        if(foucsStatus == null){
+    else if (a.substr(0, 2) == "bc") {
+        if (foucsStatus == null) {
             foucsStatus = "#000000";
         }
-        else{
+        else {
             foucsStatus = foucsStatus[a];
-            if(foucsStatus == null){
+            if (foucsStatus == null) {
                 foucsStatus = "#000000";
             }
         }
     }
-    else if(a == "ht"){
-        if(foucsStatus == null){
+    else if (a == "ht") {
+        if (foucsStatus == null) {
             foucsStatus = "1";
         }
-        else{
+        else {
             foucsStatus = foucsStatus[a];
-            if(foucsStatus == null){
+            if (foucsStatus == null) {
                 foucsStatus = "1";
             }
         }
 
-        if(["0", "1", "2"].indexOf(foucsStatus.toString()) == -1){
+        if (["0", "1", "2"].indexOf(foucsStatus.toString()) == -1) {
             foucsStatus = "1";
         }
     }
-    else if(a == "vt"){//默认垂直居中
-        if(foucsStatus == null){
+    else if (a == "vt") {//默认垂直居中
+        if (foucsStatus == null) {
             foucsStatus = "0";
         }
-        else{
+        else {
             foucsStatus = foucsStatus[a];
-            if(foucsStatus == null){
+            if (foucsStatus == null) {
                 foucsStatus = "0";
             }
         }
 
-        if(["0", "1", "2"].indexOf(foucsStatus.toString()) == -1){
+        if (["0", "1", "2"].indexOf(foucsStatus.toString()) == -1) {
             foucsStatus = "0";
         }
     }
-    else if(a == "ct"){
-        if(foucsStatus == null){
+    else if (a == "ct") {
+        if (foucsStatus == null) {
             foucsStatus = null;
         }
-        else{
+        else {
             foucsStatus = foucsStatus[a];
-            if(foucsStatus == null){
+            if (foucsStatus == null) {
                 foucsStatus = null;
             }
         }
     }
-    else if(a == "fs"){
-        if(foucsStatus == null){
+    else if (a == "fs") {
+        if (foucsStatus == null) {
             foucsStatus = String(Store.defaultFontSize);
         }
-        else{
+        else {
             foucsStatus = foucsStatus[a];
-            if(foucsStatus == null){
+            if (foucsStatus == null) {
                 foucsStatus = String(Store.defaultFontSize);
             }
         }
     }
-    else if(a == "tb"){
-        if(foucsStatus == null){
+    else if (a == "tb") {
+        if (foucsStatus == null) {
             foucsStatus = "0";
         }
-        else{
+        else {
             foucsStatus = foucsStatus[a];
-            if(foucsStatus == null){
+            if (foucsStatus == null) {
                 foucsStatus = "0";
             }
         }
     }
-    else if(a == "tr"){
-        if(foucsStatus == null){
+    else if (a == "tr") {
+        if (foucsStatus == null) {
             foucsStatus = "0";
         }
-        else{
+        else {
             foucsStatus = foucsStatus[a];
-            if(foucsStatus == null){
+            if (foucsStatus == null) {
                 foucsStatus = "0";
             }
         }
     }
-    else if(a == "rt"){
-        if(foucsStatus == null){
+    else if (a == "rt") {
+        if (foucsStatus == null) {
             foucsStatus = null;
         }
-        else{
+        else {
             foucsStatus = foucsStatus[a];
-            if(foucsStatus == null){
+            if (foucsStatus == null) {
                 foucsStatus = null;
             }
         }
@@ -560,8 +561,28 @@ export function checkstatusByCell(cell, a){
 }
 
 export function textTrim(x) {
-    if(x==null || x.length==0){
+    if (x == null || x.length == 0) {
         return x;
     }
-    return x.replace(/^\s+|\s+$/gm,'');
+    return x.replace(/^\s+|\s+$/gm, '');
+}
+
+export function pasteHyperLink(offsetRow, offsetCol) {
+    let order = getSheetIndex(Store.currentSheetIndex);
+    let file = Store.luckysheetfile[order];
+    let hyperlink = $.extend(true, {}, file.hyperlink);
+    let copyRange = Store.luckysheet_copy_save.copyRange;
+    let selectHyperLinks = {}
+    if (copyRange) {
+        copyRange.map(range => {
+            for (let row = range.row[0]; row <= range.row[1]; row++) {
+                for (let column = range.column[0]; column <= range.column[1]; column++) {
+                    if (hyperlink[`${row}_${column}`]) {
+                        // selectHyperLinks[`${row}_${column}`] = hyperlink[`${row}_${column}`]
+                        setHyperlink(row + offsetRow, column + offsetCol, hyperlink[`${row}_${column}`])
+                    }
+                }
+            }
+        })
+    }
 }
