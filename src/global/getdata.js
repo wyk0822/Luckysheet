@@ -568,7 +568,7 @@ export function textTrim(x) {
 }
 
 export function pasteHyperLink(offsetRow, offsetCol) {
-    let order = getSheetIndex(Store.currentSheetIndex);
+    let order = getSheetIndex(Store.luckysheet_copy_save.dataSheetIndex);
     let file = Store.luckysheetfile[order];
     let hyperlink = $.extend(true, {}, file.hyperlink);
     let copyRange = Store.luckysheet_copy_save.copyRange;
