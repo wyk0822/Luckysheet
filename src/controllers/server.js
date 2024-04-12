@@ -399,7 +399,7 @@ const server = {
 					_this.retryTimer = null
 				}else{
 					_this.debugLog(_this, "连接已断开。")
-					alert("服务器通信发生错误，请点击确认刷新后重试，如若不行请联系管理员！");
+					alert(`服务器通信发生错误，请点击确认刷新后重试，如若不行请联系管理员！状态码：${e.code}`);
 					location.reload(true);
 				}
 	        }
