@@ -215,12 +215,15 @@ const server = {
 
 	            //防止websocket长时间不发送消息导致断连
 				_this.retryTimer = setInterval(function(){
-	                _this.websocket.send("rub");
-	            }, 60000);
+	                _this.websocket.send("ping");
+	            }, 6000);
 	        }
 
 	        //客户端接收服务端数据时触发
 	        _this.websocket.onmessage = function(result){
+				if (result.data == "pong"){
+					return
+				}
 				Store.result = result
 				let data = new Function("return " + result.data)();
         method.createHookFunction('cooperativeMessage', data)
