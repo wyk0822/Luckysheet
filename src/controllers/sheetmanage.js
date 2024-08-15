@@ -728,6 +728,9 @@ const sheetmanage = {
             if (celldata && celldata.length > 0) {
                 for (let i = 0; i < celldata.length; i++) {
                     let item = celldata[i];
+                    if (item == null) {
+                        continue
+                    }
                     let r = item.r;
                     let c = item.c;
                     let v = item.v;
