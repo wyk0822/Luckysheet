@@ -12,13 +12,11 @@ function setcellvalue(r, c, d, v) {
     }
     // 若采用深拷贝，初始化时的单元格属性丢失
     // let cell = $.extend(true, {}, d[r][c]);
-    let cell 
+    let cell =null
     try {
-        let cell = d[r][c];    
+        cell = d[r][c];    
     } catch (error) {
-        return
     }
-    
     let vupdate;
 
     if (getObjType(v) == "object") {
