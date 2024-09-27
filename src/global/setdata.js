@@ -214,7 +214,11 @@ function setcellvalue(r, c, d, v) {
         }
     }
 
-    d[r][c] = cell;
+    try {
+        d[r][c] = cell;
+    } catch (error) {
+        return null
+    }
     return cell;
 }
 
